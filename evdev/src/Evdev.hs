@@ -51,6 +51,7 @@ module Evdev (
 
 import Control.Arrow ((&&&))
 import Control.Monad (filterM, join)
+import Data.Binary (Binary)
 import Data.ByteString.Char8 (ByteString, pack)
 import Data.Int (Int32)
 import Data.List.Extra (enumerate)
@@ -65,6 +66,7 @@ import Data.Tuple.Extra (uncurry3)
 import Data.Word (Word16)
 import Foreign ((.|.))
 import Foreign.C (CUInt)
+import GHC.Generics (Generic)
 import System.Posix.Process (getProcessID)
 import System.Posix.Files (readSymbolicLink)
 import System.Posix.ByteString (Fd, RawFilePath)
@@ -108,21 +110,25 @@ data EventData
     | UnknownEvent Word16 EventCode EventValue {- ^ We include this primarily so that 'fromCEvent' can be well-defined -
         let us know if you ever actually see one emitted by a device, as it would likely
         indicate a shortcoming in the library. -}
-    deriving (Eq, Ord, Show)
+    deriving (Eq, Generic, Ord, Show)
+instance Binary EventData
 
 -- | A direct representation of the /code/ field of the C /input_event/, for when there is no obvious meaningful sum type.
 newtype EventCode = EventCode Word16
-    deriving (Eq, Ord, Show, Enum)
+    deriving (Eq, Generic, Ord, Show, Enum)
+instance Binary EventCode
 -- | A direct representation of the /value/ field of the C /input_event/, for when there is no obvious meaningful sum type.
 newtype EventValue = EventValue Int32
-    deriving (Eq, Ord, Show, Enum)
+    deriving (Eq, Generic, Ord, Show, Enum)
+instance Binary EventValue
 
 -- | The status of a key.
 data KeyEvent
     = Released
     | Pressed
     | Repeated
-    deriving (Bounded, Enum, Eq, Ord, Read, Show)
+    deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
+instance Binary KeyEvent
 
 convertFlags :: Set LL.ReadFlag -> CUInt
 convertFlags = fromIntegral . foldr ((.|.) . fromEnum) 0

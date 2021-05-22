@@ -7,9 +7,15 @@ seems to be on its way to being fixed with `.hie` files (enable `-fwrite-ide-inf
     https://github.com/haskell/haddock/commit/8bc3c2990475a254e168fbdb005af93f9397b19c
 -}
 
+{-# LANGUAGE DeriveAnyClass #-}
+
 -- | Datatypes corresponding to the constants in [input-event-codes.h](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h).
 -- See [the Linux Kernel documentation](https://www.kernel.org/doc/html/latest/input/event-codes.html) for full details, noting that all names have been mechanically transformed into CamelCase.
 module Evdev.Codes where
+
+import GHC.Generics (Generic)
+import Data.Binary (Binary)
+import Data.Hashable (Hashable)
 
 #include <linux/input-event-codes.h>
 
@@ -27,7 +33,8 @@ module Evdev.Codes where
     EV_FF as EvFf,
     EV_PWR as EvPwr,
     EV_FF_STATUS as EvFfStatus}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
+
 
 -- | Synchronization events
 {#enum define SyncEvent {
@@ -35,7 +42,7 @@ module Evdev.Codes where
     SYN_CONFIG as SynConfig,
     SYN_MT_REPORT as SynMtReport,
     SYN_DROPPED as SynDropped} --TODO handle SYN_DROPPED automatically for streams
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Keys and buttons
 {#enum define Key {
@@ -579,7 +586,7 @@ module Evdev.Codes where
     BTN_TRIGGER_HAPPY38 as BtnTriggerHappy38,
     BTN_TRIGGER_HAPPY39 as BtnTriggerHappy39,
     BTN_TRIGGER_HAPPY40 as BtnTriggerHappy40}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Relative changes
 {#enum define RelativeAxis {
@@ -593,7 +600,7 @@ module Evdev.Codes where
     REL_DIAL as RelDial,
     REL_WHEEL as RelWheel,
     REL_MISC as RelMisc}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Absolute changes
 {#enum define AbsoluteAxis {
@@ -639,7 +646,7 @@ module Evdev.Codes where
     ABS_MT_DISTANCE as AbsMtDistance,
     ABS_MT_TOOL_X as AbsMtToolX,
     ABS_MT_TOOL_Y as AbsMtToolY}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Stateful binary switches
 {#enum define SwitchEvent {
@@ -659,7 +666,7 @@ module Evdev.Codes where
     SW_ROTATE_LOCK as SwRotateLock,
     SW_LINEIN_INSERT as SwLineinInsert,
     SW_MUTE_DEVICE as SwMuteDevice}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Miscellaneous
 {#enum define MiscEvent {
@@ -669,7 +676,7 @@ module Evdev.Codes where
     MSC_RAW as MscRaw,
     MSC_SCAN as MscScan,
     MSC_TIMESTAMP as MscTimestamp}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | LEDs
 {#enum define LEDEvent {
@@ -684,20 +691,20 @@ module Evdev.Codes where
     LED_MISC as LedMisc,
     LED_MAIL as LedMail,
     LED_CHARGING as LedCharging}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Specifying autorepeating events
 {#enum define RepeatEvent {
     REP_DELAY as RepDelay,
     REP_PERIOD as RepPeriod}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | For simple sound output devices
 {#enum define SoundEvent {
     SND_CLICK as SndClick,
     SND_BELL as SndBell,
     SND_TONE as SndTone}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
 
 -- | Device properties
 {#enum define DeviceProperty {
@@ -708,4 +715,4 @@ module Evdev.Codes where
     INPUT_PROP_TOPBUTTONPAD as InputPropTopbuttonpad,
     INPUT_PROP_POINTING_STICK as InputPropPointingStick,
     INPUT_PROP_ACCELEROMETER as InputPropAccelerometer}
-    deriving (Bounded, Eq, Ord, Read, Show) #}
+    deriving (Bounded, Eq, Ord, Read, Show, Generic, Binary, Hashable) #}
